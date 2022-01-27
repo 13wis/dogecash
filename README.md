@@ -1,0 +1,1 @@
+The full stack implementation of dogecash, the peer to peer app.
