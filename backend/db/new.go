@@ -1,6 +1,8 @@
 package db
 
 import (
+	"database/sql"
+	"fmt"
 	"log"
 	"os"
 
@@ -15,26 +17,30 @@ func NewGormDB() *gorm.DB {
 		pass                   = os.Getenv("DB_PASS")
 		instanceConnectionName = os.Getenv("INSTANCE_CONNECTION_NAME")
 		dbName                 = os.Getenv("DB_NAME")
+		db                     *sql.DB
+		err                    error
 	)
 
-	cfg := proxy.Cfg(instanceConnectionName, user, pass)
-	cfg.DBName = dbName
-	db, err := proxy.DialCfg(cfg)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+	_, isSet := os.LookupEnv("IS_CLOUD_RUN")
+	if isSet {
+		socketDir, isSet := os.LookupEnv("DB_SOCKET_DIR")
+		if !isSet {
+			socketDir = "cloudsql"
+		}
 
-	// For deployed cloud run connections
-	// socketDir, isSet := os.LookupEnv("DB_SOCKET_DIR")
-	// if !isSet {
-	// 	socketDir = "cloudsql"
-	// }
-	//
-	// dsn := fmt.Sprintf("%s:%s@unix(/%s/%s)/%s?parseTime=true", user, pass, socketDir, instanceConnectionName, dbName)
-	// db, err := sql.Open("mysql", dsn)
-	// if err != nil {
-	// 	log.Fatal(err.Error())
-	// }
+		dsn := fmt.Sprintf("%s:%s@unix(/%s/%s)/%s?parseTime=true", user, pass, socketDir, instanceConnectionName, dbName)
+		db, err = sql.Open("mysql", dsn)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+	} else {
+		cfg := proxy.Cfg(instanceConnectionName, user, pass)
+		cfg.DBName = dbName
+		db, err = proxy.DialCfg(cfg)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+	}
 
 	config := mysql.New(mysql.Config{
 		Conn: db,
