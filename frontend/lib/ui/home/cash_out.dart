@@ -14,6 +14,8 @@ class _CashOutScreenState extends State<CashOutScreen>
       Tween<Offset>(begin: const Offset(-1 / 12, 0), end: Offset.zero);
   final currency =
       intl.NumberFormat.simpleCurrency(locale: "en-US", decimalDigits: 0);
+  final full =
+      intl.NumberFormat.simpleCurrency(locale: "en-US", decimalDigits: 2);
   final List<String> numPadKeys = [
     '1',
     '2',
@@ -249,11 +251,23 @@ class _CashOutScreenState extends State<CashOutScreen>
                                         GlobalSpacingFactor.one))),
                             child: state.loading
                                 ? ModifiedProgressIndicator(color: Colors.white)
-                                : const Text('cash out',
+                                : const Text('confirm',
                                     style: TextStyle(color: Colors.white)));
                       }))
                 ],
-                title: const Text('confirm'),
+                title: Column(children: [
+                  const Text('cash out'),
+                  BlocBuilder<BalanceBloc, BalanceState>(builder: (context, b) {
+                    if (b.isUnknown) {
+                      context.read<BalanceBloc>().add(const GetBalance());
+                    }
+                    final int? balance = b.balance;
+                    return balance != null
+                        ? Text(full.format(balance / 100),
+                            style: const TextStyle(fontSize: 12.0))
+                        : const Text('balance unavailable');
+                  })
+                ]),
                 elevation: 0.0),
             body: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
               FadeSlideSwitcher(Text(warn, key: ValueKey<String>(warn)),

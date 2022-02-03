@@ -75,6 +75,7 @@ func UpdateActivity(uap *UpdateActivityParams) (*dogecash.Activity, error) {
 		activity.Amount = uap.Payout.Amount
 		activity.Created = uap.Payout.Created
 		activity.ExternalAccountType = (*string)(&uap.Payout.Type)
+		activity.ArrivalDate = uap.Payout.ArrivalDate
 
 		switch uap.Payout.Type {
 		case stripe.PayoutTypeBank:

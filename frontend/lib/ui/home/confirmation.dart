@@ -23,6 +23,9 @@ class ConfirmationScreen extends StatelessWidget {
     final shader = gradientMap[activity.id.toInt() % 6]!
         .createShader(const Rect.fromLTWH(0.0, 0.0, 150.0, 200.0));
     final style = Theme.of(context).textTheme.headline4;
+    final date = intl.DateFormat.yMMMd().add_jm();
+    final formatted = date.format(DateTime.fromMillisecondsSinceEpoch(
+        activity.arrivalDate.toInt() * 1000));
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
@@ -86,7 +89,13 @@ class ConfirmationScreen extends StatelessWidget {
                             text: activity.activityType ==
                                     Activity_ActivityType.pay
                                 ? 'paid '
-                                : 'requested ',
+                                : activity.activityType ==
+                                        Activity_ActivityType.add_cash
+                                    ? 'added '
+                                    : activity.activityType ==
+                                            Activity_ActivityType.cash_out
+                                        ? 'cashed out '
+                                        : 'requested ',
                             style: style),
                         TextSpan(
                             text:
@@ -96,19 +105,35 @@ class ConfirmationScreen extends StatelessWidget {
                                 fontSize: style.fontSize,
                                 fontWeight: FontWeight.bold,
                                 foreground: Paint()..shader = shader)),
-                        TextSpan(
-                            text: activity.activityType ==
-                                    Activity_ActivityType.pay
-                                ? ' to '
-                                : ' from ',
-                            style: style),
-                        TextSpan(
-                            text: activity.peer.dogetag,
-                            style: TextStyle(
-                                fontFamily: 'Avenir',
-                                fontSize: style.fontSize,
-                                fontWeight: FontWeight.bold,
-                                foreground: Paint()..shader = shader))
+                        if (activity.activityType ==
+                            Activity_ActivityType.cash_out) ...[
+                          TextSpan(text: ' expected on ', style: style),
+                          TextSpan(
+                              text: formatted,
+                              style: TextStyle(
+                                  fontFamily: 'Avenir',
+                                  fontSize: style.fontSize,
+                                  fontWeight: FontWeight.bold,
+                                  foreground: Paint()..shader = shader))
+                        ],
+                        if (activity.activityType ==
+                                Activity_ActivityType.pay ||
+                            activity.activityType ==
+                                Activity_ActivityType.request) ...[
+                          TextSpan(
+                              text: activity.activityType ==
+                                      Activity_ActivityType.pay
+                                  ? ' to '
+                                  : ' from ',
+                              style: style),
+                          TextSpan(
+                              text: activity.peer.dogetag,
+                              style: TextStyle(
+                                  fontFamily: 'Avenir',
+                                  fontSize: style.fontSize,
+                                  fontWeight: FontWeight.bold,
+                                  foreground: Paint()..shader = shader))
+                        ]
                       ])),
                       const SizedBox(height: GlobalSpacingFactor.four * 2),
                       DogeButton('awesome!',

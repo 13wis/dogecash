@@ -256,11 +256,11 @@ class _AddCashScreenState extends State<AddCashScreen>
                                         GlobalSpacingFactor.one))),
                             child: state.loading
                                 ? ModifiedProgressIndicator(color: Colors.white)
-                                : const Text('add cash',
+                                : const Text('confirm',
                                     style: TextStyle(color: Colors.white)));
                       }))
                 ],
-                title: const Text('confirm'),
+                title: const Text('add cash'),
                 elevation: 0.0),
             body: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
               FadeSlideSwitcher(Text(warn, key: ValueKey<String>(warn)),
