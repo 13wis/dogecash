@@ -6,6 +6,7 @@ class Actions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const double strokeWidth = 3.0;
+
     return SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: GlobalSpacingFactor.two),
         scrollDirection: Axis.horizontal,
@@ -41,9 +42,8 @@ class Actions extends StatelessWidget {
               Padding(
                   padding: const EdgeInsets.symmetric(vertical: strokeWidth),
                   child: InkWell(
-                      onTap: () => AutoRouter.of(context).push(
-                          SearchDogeScreenRoute(
-                              activity: Activity_ActivityType.pay)),
+                      onTap: () => AutoRouter.of(context)
+                          .push(const AddCashScreenRoute()),
                       child: Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: GlobalSpacingFactor.two,
@@ -78,9 +78,8 @@ class Actions extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(
                       0.0, strokeWidth, strokeWidth, strokeWidth),
                   child: InkWell(
-                      onTap: () => AutoRouter.of(context).push(
-                          SearchDogeScreenRoute(
-                              activity: Activity_ActivityType.pay)),
+                      onTap: () => AutoRouter.of(context)
+                          .push(const CashOutScreenRoute()),
                       child: Container(
                           padding: const EdgeInsets.symmetric(
                               vertical: GlobalSpacingFactor.two,

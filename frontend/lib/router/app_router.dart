@@ -32,7 +32,9 @@ Widget fadeThroughTransition(BuildContext context, Animation<double> animation,
         page: ConfirmationScreen, transitionsBuilder: fadeThroughTransition),
     CustomRoute(
         page: ActivityListScreen, transitionsBuilder: fadeThroughTransition),
-    AutoRoute(page: ActivityDetailScreen, fullscreenDialog: true)
+    AutoRoute(page: ActivityDetailScreen, fullscreenDialog: true),
+    AutoRoute(page: AddCashScreen, fullscreenDialog: true),
+    AutoRoute(page: CashOutScreen, fullscreenDialog: true)
   ],
 )
 class AppRouter extends _$AppRouter {}

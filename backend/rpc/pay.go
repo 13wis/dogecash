@@ -30,6 +30,9 @@ func (s *DogecashServer) Pay(ctx context.Context,
 	if req.Amount > tools.MaximumAmount {
 		return nil, GRPCError(ErrorCodeAmountTooHigh)
 	}
+	if req.To == claims.DogeID {
+		return nil, GRPCError(ErrorCodeSelfTransfer)
+	}
 
 	params := &tools.ChargeAndTransferParams{
 		AccountID:  *claims.AccountID,

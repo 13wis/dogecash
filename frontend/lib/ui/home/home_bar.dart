@@ -1,7 +1,7 @@
 part of 'home_screen.dart';
 
 class HomeAppBar extends AppBar {
-  HomeAppBar({Key? key})
+  HomeAppBar({required VoidCallback onTap, Key? key})
       : super(
             backgroundColor: Colors.transparent,
             elevation: 0.0,
@@ -42,6 +42,7 @@ class HomeAppBar extends AppBar {
                                       highlightColor: Colors.green.shade50);
                                 })))
                         : GestureDetector(
+                            onTap: onTap,
                             child: Container(
                                 padding: const EdgeInsets.all(6.0),
                                 decoration: BoxDecoration(

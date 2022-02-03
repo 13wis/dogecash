@@ -26,6 +26,9 @@ func (s *DogecashServer) SendRequest(ctx context.Context,
 	if req.Amount > tools.MaximumAmount {
 		return nil, GRPCError(ErrorCodeAmountTooHigh)
 	}
+	if req.To == claims.DogeID {
+		return nil, GRPCError(ErrorCodeSelfTransfer)
+	}
 
 	full := &db.FullDoge{}
 	err = s.DB.Table("doges").

@@ -397,9 +397,9 @@ class _AmountScreenState extends State<AmountScreen>
                   behavior: SnackBarBehavior.floating,
                   content: Container(child: content)));
           }
-          if (state.success) {
+          if (state.success && state.activity != null) {
             AutoRouter.of(context)
-                .replace(ConfirmationScreenRoute(activity: state.activity));
+                .replace(ConfirmationScreenRoute(activity: state.activity!));
           }
         },
         child: Scaffold(

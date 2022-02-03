@@ -29,14 +29,13 @@ class ActivityDetailScreen
               final shader = gradientMap[activityId % 6]!
                   .createShader(const Rect.fromLTWH(0.0, 0.0, 150.0, 200.0));
               final date = intl.DateFormat.yMMMd().add_jm();
-              return state.loading
-                  ? Center(child: ModifiedProgressIndicator())
-                  : activity != null
-                      ? Scaffold(
-                          appBar: AppBar(
-                              elevation: 0.0,
-                              backgroundColor: DogeColors.background),
-                          body: Padding(
+              return Scaffold(
+                  appBar: AppBar(
+                      elevation: 0.0, backgroundColor: DogeColors.background),
+                  body: state.loading
+                      ? Center(child: ModifiedProgressIndicator())
+                      : activity != null
+                          ? Padding(
                               padding: const EdgeInsets.fromLTRB(
                                   GlobalSpacingFactor.four,
                                   GlobalSpacingFactor.four,
@@ -184,8 +183,9 @@ class ActivityDetailScreen
                                       ],
                                     ])
                                     // Force the components to center a little
-                                  ])))
-                      : const Center(child: Text('could not find activity'));
+                                  ]))
+                          : const Center(
+                              child: Text('could not find activity')));
             },
             key: key);
 }

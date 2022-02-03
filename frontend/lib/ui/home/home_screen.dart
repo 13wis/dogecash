@@ -27,16 +27,20 @@ import 'package:frontend/ui/widgets/gradient_paint.dart';
 import 'package:frontend/ui/widgets/progress_indicator.dart';
 import 'package:frontend/ui/widgets/scale_on_tap.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:protobuf/protobuf.dart';
 import 'package:shimmer/shimmer.dart';
 
 part 'actions.dart';
 part 'activity_detail.dart';
 part 'activity_list.dart';
+part 'add_cash.dart';
 part 'amount.dart';
 part 'balance_card.dart';
 part 'bottom_sheet.dart';
+part 'cash_out.dart';
 part 'external.dart';
 part 'home_bar.dart';
+part 'profile.dart';
 part 'search_doge.dart';
 part 'confirmation.dart';
 
@@ -48,12 +52,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late int _page;
   late AssetImage image1;
   late AssetImage image2;
 
   @override
   void initState() {
     super.initState();
+    _page = 0;
     image1 = const AssetImage('assets/images/mesh-gradient-1.png');
     image2 = const AssetImage('assets/images/mesh-gradient-2.png');
   }
@@ -82,43 +88,84 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void togglePage() => setState(() => _page = 1 >> _page);
+
   @override
   Widget build(BuildContext context) {
+    void showAddCashSheet() {
+      showModalBottomSheet(
+          context: context,
+          builder: (context) => AnimatedPadding(
+              padding: MediaQuery.of(context)
+                  .viewInsets
+                  .add(const EdgeInsets.all(GlobalSpacingFactor.four)),
+              duration: const Duration(milliseconds: 100),
+              curve: Curves.decelerate,
+              child: SizedBox(
+                  height: 300,
+                  child: Column(children: [
+                    const SizedBox(height: GlobalSpacingFactor.four),
+                    Text('add cash',
+                        style: Theme.of(context).textTheme.headline5),
+                    const SizedBox(height: GlobalSpacingFactor.two),
+                    const TextField(
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            contentPadding:
+                                EdgeInsets.all(GlobalSpacingFactor.four))),
+                    const SizedBox(height: GlobalSpacingFactor.four),
+                    DogeButton('add cash')
+                  ]))));
+    }
+
     final List<Widget> cards = [BalanceCard(), External()];
     final Size size = MediaQuery.of(context).size;
-    return loadingWrapper(Scaffold(
-        appBar: HomeAppBar(),
-        body: Stack(children: [
-          ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: size.height / 3),
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemCount: cards.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                        width: size.width * 2 / 3,
-                        margin: EdgeInsets.fromLTRB(
-                            index == 0
-                                ? GlobalSpacingFactor.two
-                                : GlobalSpacingFactor.one,
-                            GlobalSpacingFactor.two,
-                            index == cards.length - 1
-                                ? GlobalSpacingFactor.two
-                                : GlobalSpacingFactor.one,
-                            GlobalSpacingFactor.two),
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: index == 0 ? image1 : image2,
-                                fit: BoxFit.cover),
-                            borderRadius: BorderRadius.circular(
-                                GlobalSpacingFactor.three)),
-                        child: Padding(
-                            padding:
-                                const EdgeInsets.all(GlobalSpacingFactor.four),
-                            child: cards[index]));
-                  })),
-          BottomSheet()
-        ])));
+    final Map<int, Widget> pages = {
+      0: Scaffold(
+          appBar: HomeAppBar(onTap: togglePage),
+          body: Stack(children: [
+            ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: size.height / 3),
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: cards.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                          width: size.width * 2 / 3,
+                          margin: EdgeInsets.fromLTRB(
+                              index == 0
+                                  ? GlobalSpacingFactor.two
+                                  : GlobalSpacingFactor.one,
+                              GlobalSpacingFactor.two,
+                              index == cards.length - 1
+                                  ? GlobalSpacingFactor.two
+                                  : GlobalSpacingFactor.one,
+                              GlobalSpacingFactor.two),
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: index == 0 ? image1 : image2,
+                                  fit: BoxFit.cover),
+                              borderRadius: BorderRadius.circular(
+                                  GlobalSpacingFactor.three)),
+                          child: Padding(
+                              padding: const EdgeInsets.all(
+                                  GlobalSpacingFactor.four),
+                              child: cards[index]));
+                    })),
+            BottomSheet()
+          ])),
+      1: ProfileScreen(onTap: togglePage)
+    };
+
+    return loadingWrapper(PageTransitionSwitcher(
+        transitionBuilder: (child, animation, secondaryAnimation) =>
+            SharedAxisTransition(
+                animation: animation,
+                secondaryAnimation: secondaryAnimation,
+                transitionType: SharedAxisTransitionType.horizontal,
+                fillColor: DogeColors.background,
+                child: child),
+        child: pages[_page]));
   }
 }

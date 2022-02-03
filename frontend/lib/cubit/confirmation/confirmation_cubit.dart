@@ -56,4 +56,35 @@ class ConfirmationCubit extends Cubit<ConfirmationCubitState> {
       emit(state.copyWith(loading: false));
     }
   }
+
+  void submitAddCash({required int amount}) async {
+    emit(state.copyWith(loading: true, success: false, activity: null));
+    try {
+      await _transferRepository.addCash(amount);
+      emit(state.copyWith(loading: false, success: true, activity: null));
+    } catch (error) {
+      emit(state.copyWith(
+          success: false,
+          errorMessage:
+              error is GrpcError ? error.message : ErrorMessage.generic));
+    } finally {
+      emit(state.copyWith(loading: false));
+    }
+  }
+
+  void submitCashOut({required int amount, bool instant = false}) async {
+    emit(state.copyWith(loading: true, success: false, activity: null));
+    try {
+      final Activity response =
+          await _transferRepository.cashOut(amount, instant);
+      emit(state.copyWith(loading: false, success: true, activity: response));
+    } catch (error) {
+      emit(state.copyWith(
+          success: false,
+          errorMessage:
+              error is GrpcError ? error.message : ErrorMessage.generic));
+    } finally {
+      emit(state.copyWith(loading: false));
+    }
+  }
 }

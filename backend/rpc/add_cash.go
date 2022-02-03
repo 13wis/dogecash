@@ -52,7 +52,7 @@ func (s *DogecashServer) AddCash(ctx context.Context,
 	}
 
 	uap := &db.UpdateActivityParams{
-		ActivityType: dogecash.Activity_pay,
+		ActivityType: dogecash.Activity_add_cash,
 		Amount:       req.Amount,
 		Charge:       charge,
 		DB:           s.DB,

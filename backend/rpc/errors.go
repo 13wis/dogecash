@@ -57,7 +57,7 @@ var errorMessage = map[ErrorCode]string{
 	ErrorCodePasswordLength:             "password not long enough",
 	ErrorCodeRecipientNotOnboard:        "recipient not yet onboarded",
 	ErrorCodePaymentSource:              "payment source issue, refer to account page for details",
-	ErrorCodeSelfTransfer:               "cannot transfer from account balance to self",
+	ErrorCodeSelfTransfer:               "cannot transfer or request from self",
 	ErrorCodeSettingToken:               "error setting doge token",
 	ErrorCodeStripe:                     "stripe error encountered",
 	ErrorCodeUnknown:                    "unknow server error",

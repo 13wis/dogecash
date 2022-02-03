@@ -64,12 +64,12 @@ class _AuthScreenState extends State<AuthScreen> {
     final Map<int, Widget> forms = {
       0: RegisterForm(
           onSubmissionSuccess: () async =>
-              await AutoRouter.of(context).push(OnboardScreenRoute()),
+              await AutoRouter.of(context).replaceAll([OnboardScreenRoute()]),
           onSubmissionFailure: _showSnackbar,
           recognizer: recognizer),
       1: SignInForm(
-          onSubmissionSuccess: () async =>
-              await AutoRouter.of(context).push(const HomeScreenRoute()),
+          onSubmissionSuccess: () async => await AutoRouter.of(context)
+              .replaceAll([const HomeScreenRoute()]),
           onSubmissionFailure: _showSnackbar,
           name: _name,
           recognizer: recognizer)

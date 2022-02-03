@@ -67,8 +67,7 @@ class _$AppRouter extends RootStackRouter {
           barrierDismissible: false);
     },
     ConfirmationScreenRoute.name: (routeData) {
-      final args = routeData.argsAs<ConfirmationScreenRouteArgs>(
-          orElse: () => const ConfirmationScreenRouteArgs());
+      final args = routeData.argsAs<ConfirmationScreenRouteArgs>();
       return CustomPage<dynamic>(
           routeData: routeData,
           child: ConfirmationScreen(activity: args.activity, key: args.key),
@@ -93,6 +92,14 @@ class _$AppRouter extends RootStackRouter {
           child:
               ActivityDetailScreen(activityId: args.activityId, key: args.key),
           fullscreenDialog: true);
+    },
+    AddCashScreenRoute.name: (routeData) {
+      return MaterialPageX<dynamic>(
+          routeData: routeData, child: AddCashScreen(), fullscreenDialog: true);
+    },
+    CashOutScreenRoute.name: (routeData) {
+      return MaterialPageX<dynamic>(
+          routeData: routeData, child: CashOutScreen(), fullscreenDialog: true);
     }
   };
 
@@ -108,7 +115,9 @@ class _$AppRouter extends RootStackRouter {
         RouteConfig(ActivityListScreenRoute.name,
             path: '/activity-list-screen'),
         RouteConfig(ActivityDetailScreenRoute.name,
-            path: '/activity-detail-screen')
+            path: '/activity-detail-screen'),
+        RouteConfig(AddCashScreenRoute.name, path: '/add-cash-screen'),
+        RouteConfig(CashOutScreenRoute.name, path: '/cash-out-screen')
       ];
 }
 
@@ -213,7 +222,7 @@ class SearchDogeScreenRouteArgs {
 /// [ConfirmationScreen]
 class ConfirmationScreenRoute
     extends PageRouteInfo<ConfirmationScreenRouteArgs> {
-  ConfirmationScreenRoute({Activity? activity, Key? key})
+  ConfirmationScreenRoute({required Activity activity, Key? key})
       : super(ConfirmationScreenRoute.name,
             path: '/confirmation-screen',
             args: ConfirmationScreenRouteArgs(activity: activity, key: key));
@@ -222,9 +231,9 @@ class ConfirmationScreenRoute
 }
 
 class ConfirmationScreenRouteArgs {
-  const ConfirmationScreenRouteArgs({this.activity, this.key});
+  const ConfirmationScreenRouteArgs({required this.activity, this.key});
 
-  final Activity? activity;
+  final Activity activity;
 
   final Key? key;
 
@@ -281,4 +290,22 @@ class ActivityDetailScreenRouteArgs {
   String toString() {
     return 'ActivityDetailScreenRouteArgs{activityId: $activityId, key: $key}';
   }
+}
+
+/// generated route for
+/// [AddCashScreen]
+class AddCashScreenRoute extends PageRouteInfo<void> {
+  const AddCashScreenRoute()
+      : super(AddCashScreenRoute.name, path: '/add-cash-screen');
+
+  static const String name = 'AddCashScreenRoute';
+}
+
+/// generated route for
+/// [CashOutScreen]
+class CashOutScreenRoute extends PageRouteInfo<void> {
+  const CashOutScreenRoute()
+      : super(CashOutScreenRoute.name, path: '/cash-out-screen');
+
+  static const String name = 'CashOutScreenRoute';
 }
