@@ -49,7 +49,7 @@ type MyDoges struct {
 	Dogee           int64
 	Doger           int64
 	InteractionType string    `gorm:"default:'recent';"`
-	LastInteraction time.Time `gorm:"default:current_timestamp ON update current_timestamp;"`
+	LastInteraction time.Time `gorm:", default:current_timestamp ON update current_timestamp;"`
 }
 
 type FullDoge struct {
