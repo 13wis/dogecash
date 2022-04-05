@@ -34,7 +34,7 @@ func UpdateExternalAccount(accountId string, customerId string, uear *dogecash.U
 
 		if account.ExternalAccounts != nil || len(account.ExternalAccounts.Data) > 0 {
 			for _, account := range account.ExternalAccounts.Data {
-				if string(account.Type) == eat && account.Card.ID != ba.ID {
+				if string(account.Type) == eat && account.BankAccount.ID != ba.ID {
 					params := &stripe.BankAccountParams{Account: &accountId}
 					if _, err := bankaccount.Del(account.Card.ID, params); err != nil {
 						return err
