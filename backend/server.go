@@ -47,7 +47,6 @@ func main() {
 	}
 
 	if *seed {
-		log.Println("received seed flag")
 		log.Println("\033[36mSeeding Stripe and DB accounts (this could take up to 5 minutes) \033[m")
 		s.Start()
 		db.SeedDBAndStripe(gorm)
@@ -67,9 +66,9 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	log.Printf("initializing grpc server at port :%s", port)
 	grpcSrv := grpc.NewServer(grpc.UnaryInterceptor(interceptors.AddClaimsToContext))
 	dogecash.RegisterDogecashServer(grpcSrv, rpc.NewServer(gorm))
 	reflection.Register(grpcSrv)
+	log.Printf("registered grpc server at port :%s", port)
 	log.Fatal(grpcSrv.Serve(lis))
 }

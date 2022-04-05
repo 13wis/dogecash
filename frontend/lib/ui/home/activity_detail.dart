@@ -33,7 +33,8 @@ class ActivityDetailScreen
                   appBar: AppBar(
                       elevation: 0.0, backgroundColor: DogeColors.background),
                   body: state.loading
-                      ? Center(child: ModifiedProgressIndicator())
+                      ? Center(
+                          child: ModifiedProgressIndicator(color: Colors.green))
                       : activity != null
                           ? Padding(
                               padding: const EdgeInsets.fromLTRB(
